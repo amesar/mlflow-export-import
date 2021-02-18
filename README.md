@@ -77,9 +77,18 @@ source mlflow-export-import-env/bin/activate
 pip install -e .
 ```
 
+If you're working with a Databricks-hosted mlflow but still wants to use mlflow-export-import locally, you'll need to set the following environment variables:
+
+```
+export MLFLOW_TRACKING_URI=databricks
+export DATABRICKS_HOST=https://mycompany.cloud.databricks.com
+export DATABRICKS_TOKEN=<MY_PERSONAL_ACCESS_TOKEN>
+```
+
+
 ### Databricks setup
 
-If you want to run mlflow-export-import scripts on Databricks, you need to build a wheel artifact, push it up to DBFS and then install it on your cluster.
+If you want to run mlflow-export-import scripts directly on Databricks, you need to build a wheel artifact, push it up to DBFS and then install it on your cluster.
 
 ```
 python setup.py bdist_wheel
@@ -96,11 +105,13 @@ There are two main programs to export experiments:
 
 Both accept either an experiment ID or name.
 
-#### export_experiment
+#### Export experiment
 
 Export one experiment to a directory.
 
-##### Usage
+Source: [export_experiment.py](https://github.com/amesar/mlflow-export-import/blob/master/mlflow_export_import/experiment/export_experiment.py)
+
+**Usage**
 
 ```
 python -u -m mlflow_export_import.experiment.export_experiment --help
@@ -132,10 +143,6 @@ python -u -m mlflow_export_import.experiment.export_experiment_list \
 
 See the [Access the MLflow tracking server from outside Databricks](https://docs.databricks.com/applications/mlflow/access-hosted-tracking-server.html).
 ```
-export MLFLOW_TRACKING_URI=databricks
-export DATABRICKS_HOST=https://mycompany.cloud.databricks.com
-export DATABRICKS_TOKEN=MY_TOKEN
-
 python -u -m mlflow_export_import.experiment.export_experiment \
   --experiment /Users/me@mycompany.com/SklearnWine \
   --output-dir out \
@@ -158,11 +165,14 @@ The run directory contains a run.json file containing run metadata and an artifa
 |     +-MLmodel
 ```
 
-#### export_experiment_list
+#### Export Experiment List
 
 Export several (or all) experiments to a directory.
 
-##### Usage
+Source: [export_experiment_list.py](https://github.com/amesar/mlflow-export-import/blob/master/mlflow_export_import/experiment/export_experiment_list.py)
+
+**Usage**
+
 ```
 python -u -m mlflow_export_import.experiment.export_experiment_list --help
 
@@ -302,11 +312,14 @@ There are two main programs to import experiments:
 * import_experiment - imports one experiment
 * import_experiment_list - imports a list of experiments
 
-#### import_experiment
+#### Import Experiment
 
 Imports one experiment.
 
-##### Usage
+Source: [import_experiment.py](https://github.com/amesar/mlflow-export-import/blob/master/mlflow_export_import/experiment/import_experiment.py)
+
+**Usage**
+
 ```
 python -u -m mlflow_export_import.experiment.import_experiment --help \
 
@@ -339,11 +352,13 @@ python -u -m mlflow_export_import.experiment.import_experiment \
   --input-dir exported_experiments/3532228
 ```
 
-#### import_experiment_list
+#### Import Experiment List
 
 Import a list of experiments.
 
-##### Usage
+Source: [import_experiment_list.py](https://github.com/amesar/mlflow-export-import/blob/master/mlflow_export_import/experiment/import_experiment_list.py)
+
+**Usage**
 
 ```
 python -m mlflow_export_import.experiment.import_experiment_list --help
@@ -371,7 +386,7 @@ python -u -m mlflow_export_import.experiment.import_experiment_list \
 
 Copies an experiment from one MLflow tracking server to another.
 
-Source: [copy_experiment.py](copy_experiment.py)
+Source: [copy_experiment.py](https://github.com/amesar/mlflow-export-import/blob/master/mlflow_export_import/experiment/copy_experiment.py)
 
 In this example we use:
 * Source tracking server runs on port 5000 
@@ -410,6 +425,8 @@ python -u -m mlflow_export_import.experiment.copy_experiment \
 ### Export run
 
 Export run to directory or zip file.
+
+Source: [export_run.py](https://github.com/amesar/mlflow-export-import/blob/master/mlflow_export_import/run/export_run.py)
 
 **Usage**
 
@@ -482,7 +499,9 @@ Sample run.json
 
 Imports a run from a directory or zip file.
 
-#### Usage
+Source: [import_run.py](https://github.com/amesar/mlflow-export-import/blob/master/mlflow_export_import/run/import_run.py)
+
+**Usage**
 
 ```
 python -m mlflow_export_import.run.import_run  --help
@@ -525,7 +544,7 @@ python -u -m mlflow_export_import.run.import_run \
 
 Copies a run from one MLflow tracking server to another.
 
-Source: [copy_run.py](copy_run.py)
+Source: [copy_run.py](https://github.com/amesar/mlflow-export-import/blob/master/mlflow_export_import/run/copy_run.py)
 
 In this example we use
 * Source tracking server runs on port 5000 
@@ -569,7 +588,7 @@ python -u -m mlflow_export_import.run.copy_run \
 
 Export a registered model to a directory.
 
-Source: [export_model.py](export_model.py).
+Source: [export_model.py](https://github.com/amesar/mlflow-export-import/blob/master/mlflow_export_import/model/export_model.py).
 
 **Usage**
 
@@ -623,7 +642,7 @@ model.json
 
 Import a registered model from a directory.
 
-Source: [import_model.py](import_model.py).
+Source: [import_model.py](https://github.com/amesar/mlflow-export-import/blob/master/mlflow_export_import/model/import_model.py).
 
 **Usage**
 
@@ -683,6 +702,11 @@ Waited 0.01 seconds
 ### List all registered models
 
 Calls the `registered-models/list` API endpoint and creates the file `registered_models.json`.
+
+Source: [list_registered_models.py](https://github.com/amesar/mlflow-export-import/blob/master/mlflow_export_import/model/list_registered_models.py).
+
+**Usage**
+
 ```
 python -u -m mlflow_export_import.model.list_registered_models
 ```
