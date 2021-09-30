@@ -139,13 +139,13 @@ Options:
 
 Export experiment by experiment ID.
 ```
-python -u -m mlflow_export_import.experiment.export_experiment_list \
+python -u -m mlflow_export_import.experiment.export_experiment \
   --experiment 2 --output-dir out
 ```
 
 Export experiment by experiment name.
 ```
-python -u -m mlflow_export_import.experiment.export_experiment_list \
+python -u -m mlflow_export_import.experiment.export_experiment \
   --experiment sklearn-wine --output-dir out
 ```
 
