@@ -51,13 +51,14 @@ def export_experiments(experiments, output_dir, export_metadata_tags, notebook_f
 
     export_all_runs = not isinstance(experiments,dict) 
     if export_all_runs:
+        experiments = list(experiments)
         experiments = bulk_utils.get_experiment_ids(experiments)
         table_data = experiments
         columns = ["Experiment Name or ID"]
         experiments_dct = {}
     else:
         experiments_dct = experiments
-        experiments = experiments.keys()
+        experiments = list(experiments.keys())
         experiments = bulk_utils.get_experiment_ids(experiments)
         table_data = [ [exp_id,len(runs)] for exp_id,runs in experiments_dct.items() ]
         num_runs = sum(x[1] for x in table_data)
