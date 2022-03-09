@@ -71,7 +71,7 @@ def _export_models(models, output_dir, notebook_formats, stages, export_run=True
 
 def export_models(models, output_dir, notebook_formats, stages="", export_all_runs=False, use_threads=False):
     exps_and_runs = get_experiments_runs_of_models(models)
-    exp_ids = exps_and_runs.keys()
+    exp_ids = list(exps_and_runs.keys())
     start_time = time.time()
     out_dir = os.path.join(output_dir,"experiments")
     exps_to_export = exp_ids if export_all_runs else exps_and_runs
