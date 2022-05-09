@@ -25,11 +25,12 @@ from mlflow_export_import.run.import_run import import_run
 
 @click.group()
 @click.version_option(version=__version__, prog_name=__mlflow_export_import__)
-def cli() -> None:
+@click.pass_context
+def cli(ctx: click.core.Context) -> None:
     """
     MLflow Export / Import CLI: Command Line Interface
     """
-    pass
+    ctx.ensure_object(dict)
 
 
 CLI_COMMANDS: List[click.Command] = [

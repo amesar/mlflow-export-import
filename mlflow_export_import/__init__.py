@@ -1,8 +1,8 @@
+from ._version import __version__ # noqa
+
 import os
 
 import mlflow
-
-from ._version import __version__
 
 
 class BaseCopier:
@@ -36,7 +36,7 @@ def  create_client(uri):
 # monkey patch mlflow.tracking.MlflowClient
 
 def add_repr_to_MlflowClient():
-    def custom_repr(self): 
+    def custom_repr(self):
         try:
             return self._tracking_client.tracking_uri
         except AttributeError:
