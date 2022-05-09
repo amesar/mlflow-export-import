@@ -1,13 +1,15 @@
 import os
-import mlflow
-from utils_test import create_output_dir, output_dir, delete_experiments, delete_models, mk_test_object_name, list_experiments
-from compare_utils import compare_runs
 
-from mlflow_export_import.model.export_model import ModelExporter
-from mlflow_export_import.bulk.export_models import export_models
-from mlflow_export_import.bulk.import_models import import_all
+import mlflow
+
+from compare_utils import compare_runs
 from mlflow_export_import.bulk import bulk_utils
+from mlflow_export_import.bulk.export_models import export_models_wrapper
+from mlflow_export_import.bulk.import_models import import_all
+from mlflow_export_import.model.export_model import ModelExporter
 from test_bulk_experiments import create_test_experiment
+from utils_test import create_output_dir, delete_experiments, delete_models, list_experiments, \
+    mk_test_object_name, output_dir
 
 # == Setup
 
@@ -40,7 +42,8 @@ def _create_model():
 def _run_test(compare_func, import_metadata_tags=False, use_threads=False):
     _init()
     model_names = [ _create_model() for j in range(0,num_models) ]
-    export_models(model_names, output_dir, notebook_formats, stages="None", export_all_runs=False, use_threads=False)
+    export_models_wrapper(model_names, output_dir, notebook_formats, stages="None",
+                          export_all_runs=False, use_threads=False)
     for model_name in model_names:
         client.rename_registered_model(model_name,_rename_model_name(model_name))
     exps = list_experiments() 

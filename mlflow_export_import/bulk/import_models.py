@@ -116,8 +116,11 @@ def import_all(input_dir, delete_model, use_src_user_id, import_metadata_tags, v
     default=False,
     show_default=True
 )
-
-def main(input_dir, delete_model, use_src_user_id, import_metadata_tags, verbose, use_threads):
+def import_models(input_dir, delete_model, use_src_user_id,
+                  import_metadata_tags, verbose, use_threads):
+    """
+    Imports models and their experiments and runs.
+    """
     print("Options:")
     for k,v in locals().items():
         print(f"  {k}: {v}")
@@ -129,4 +132,4 @@ def main(input_dir, delete_model, use_src_user_id, import_metadata_tags, verbose
         use_threads=use_threads)
 
 if __name__ == "__main__":
-    main()
+    import_models()

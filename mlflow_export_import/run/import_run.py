@@ -20,6 +20,7 @@ from mlflow_export_import.common import filesystem as _filesystem
 from mlflow_export_import.run import run_data_importer
 from mlflow_export_import.common import MlflowExportImportException
 
+
 class RunImporter():
     def __init__(self, mlflow_client=None, mlmodel_fix=True, use_src_user_id=False, \
             import_metadata_tags=False, dst_notebook_dir_add_run_id=False):
@@ -186,8 +187,11 @@ class RunImporter():
     required=False, 
     show_default=True
 )
-def main(input_dir, experiment_name, mlmodel_fix, use_src_user_id, \
-        import_metadata_tags, dst_notebook_dir, dst_notebook_dir_add_run_id):
+def import_run(input_dir, experiment_name, mlmodel_fix, use_src_user_id,
+               import_metadata_tags, dst_notebook_dir, dst_notebook_dir_add_run_id):
+    """
+    Imports a run from a directory.
+    """
     print("Options:")
     for k,v in locals().items():
         print(f"  {k}: {v}")
@@ -199,5 +203,6 @@ def main(input_dir, experiment_name, mlmodel_fix, use_src_user_id, \
         dst_notebook_dir_add_run_id=dst_notebook_dir_add_run_id)
     importer.import_run(experiment_name, input_dir, dst_notebook_dir)
 
+
 if __name__ == "__main__":
-    main()
+    import_run()

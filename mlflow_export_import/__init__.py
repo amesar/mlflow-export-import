@@ -1,9 +1,11 @@
-
 import os
-import json
+
 import mlflow
 
-class BaseCopier():
+from ._version import __version__
+
+
+class BaseCopier:
     def __init__(self, src_client, dst_client):
         self.src_client = src_client
         self.dst_client = dst_client

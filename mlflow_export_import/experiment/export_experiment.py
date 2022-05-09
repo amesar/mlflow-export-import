@@ -98,8 +98,10 @@ class ExperimentExporter():
     default="", 
     show_default=True
 )
-
-def main(experiment, output_dir, export_metadata_tags, notebook_formats):
+def export_experiment(experiment, output_dir, export_metadata_tags, notebook_formats):
+    """
+    Exports an experiment to a directory.
+    """
     print("Options:")
     for k,v in locals().items():
         print(f"  {k}: {v}")
@@ -109,5 +111,6 @@ def main(experiment, output_dir, export_metadata_tags, notebook_formats):
         notebook_formats=utils.string_to_list(notebook_formats))
     exporter.export_experiment(experiment, output_dir)
 
+
 if __name__ == "__main__":
-    main()
+    export_experiment()

@@ -115,6 +115,7 @@ class RunExporter:
         except MlflowExportImportException as e:
             print(f"WARNING: Cannot save notebook '{notebook}'. {e}")
 
+
 @click.command()
 @click.option("--run-id", 
     help="Run ID.", 
@@ -138,8 +139,10 @@ class RunExporter:
     default="", 
     show_default=True
 )
-
-def main(run_id, output_dir, export_metadata_tags, notebook_formats):
+def export_run(run_id, output_dir, export_metadata_tags, notebook_formats):
+    """
+    Exports a run to a directory.
+    """
     print("Options:")
     for k,v in locals().items():
         print(f"  {k}: {v}")
@@ -149,5 +152,6 @@ def main(run_id, output_dir, export_metadata_tags, notebook_formats):
       notebook_formats=utils.string_to_list(notebook_formats))
     exporter.export_run(run_id, output_dir)
 
+
 if __name__ == "__main__":
-    main()
+    export_run()
