@@ -1,5 +1,5 @@
 """ 
-Exports an experiment to a directory.
+Import an experiment from a directory.
 """
 
 import os
@@ -12,7 +12,8 @@ from mlflow_export_import import utils
 from mlflow_export_import.common import mlflow_utils
 from mlflow_export_import.common.http_client import DatabricksHttpClient
 
-class ExperimentImporter():
+
+class ExperimentImporter:
     def __init__(self, mlflow_client=None, mlmodel_fix=True, use_src_user_id=False, import_metadata_tags=False):
         """
         :param mlflow_client: MLflow client or if None create default client.
@@ -21,8 +22,8 @@ class ExperimentImporter():
         :param import_metadata_tags: Import mlflow_export_import tags.
         """
         self.mlflow_client = mlflow_client or mlflow.tracking.MlflowClient()
-        self.run_importer = RunImporter(self.mlflow_client, mlmodel_fix=mlmodel_fix, \
-            use_src_user_id=use_src_user_id, \
+        self.run_importer = RunImporter(self.mlflow_client, mlmodel_fix=mlmodel_fix,
+            use_src_user_id=use_src_user_id,
             import_metadata_tags=import_metadata_tags, dst_notebook_dir_add_run_id=True)
         print("MLflowClient:",self.mlflow_client)
         self.dbx_client = DatabricksHttpClient()
@@ -85,8 +86,11 @@ class ExperimentImporter():
     required=False,
     show_default=True
 )
-
-def main(input_dir, experiment_name, just_peek, use_src_user_id, import_metadata_tags, dst_notebook_dir):
+def import_experiment(input_dir, experiment_name, just_peek, use_src_user_id, import_metadata_tags,
+                      dst_notebook_dir):
+    """
+    Import an experiment from a directory.
+    """
     print("Options:")
     for k,v in locals().items():
         print(f"  {k}: {v}")
@@ -99,5 +103,6 @@ def main(input_dir, experiment_name, just_peek, use_src_user_id, import_metadata
             import_metadata_tags=import_metadata_tags)
         importer.import_experiment(experiment_name, input_dir, dst_notebook_dir)
 
+
 if __name__ == "__main__":
-    main()
+    import_experiment()

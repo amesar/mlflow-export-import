@@ -6,7 +6,8 @@ from mlflow_export_import.common import mlflow_utils
 from mlflow_export_import.common import MlflowExportImportException
 from mlflow_export_import.common import USER_AGENT
 
-class HttpClient():
+
+class HttpClient:
     """ Wrapper for GET and POST methods for Databricks REST APIs  - standard Databricks API and MLflow API. """
     def __init__(self, api_name, host=None, token=None):
         """
@@ -82,8 +83,10 @@ class MlflowHttpClient(HttpClient):
 @click.option("--data", help="HTTP POST data as JSON.", required=False, type=str)
 @click.option("--output-file", help="Output file.", required=False, type=str)
 @click.option("--verbose", help="Verbose.", type=bool, default=False, show_default=True)
-
-def main(api, resource, method, params, data, output_file, verbose):
+def http_client(api, resource, method, params, data, output_file, verbose):
+    """
+    Interact with the MLflow Export/Import HTTP Client
+    """
     def write_output(rsp, output_file):
         if output_file:
             print(f"Output file: {output_file}")
@@ -110,5 +113,6 @@ def main(api, resource, method, params, data, output_file, verbose):
     else:
         print(f"ERROR: Unsupported HTTP method '{method}'")
 
+
 if __name__ == "__main__":
-    main()
+    http_client()

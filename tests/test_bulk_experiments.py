@@ -1,12 +1,13 @@
 import os
-import mlflow
-from mlflow_export_import.bulk import bulk_utils
-from utils_test import create_output_dir, create_experiment, output_dir, mk_uuid, delete_experiments
-from sklearn_utils import create_sklearn_model
-from compare_utils import compare_runs
 
-from mlflow_export_import.bulk.export_experiments import export_experiments
-from mlflow_export_import.bulk.import_experiments import import_experiments
+import mlflow
+
+from compare_utils import compare_runs
+from mlflow_export_import.bulk import bulk_utils
+from mlflow_export_import.bulk.export_experiments import export_experiments_wrapper
+from mlflow_export_import.bulk.import_experiments import import_experiments_wrapper
+from sklearn_utils import create_sklearn_model
+from utils_test import create_experiment, create_output_dir, delete_experiments, mk_uuid, output_dir
 
 notebook_formats = "SOURCE,DBC"
 exp_suffix = "_Imported"
@@ -42,13 +43,17 @@ def _run_test(compare_func, export_metadata_tags=False, use_threads=False):
     create_output_dir()
     exps = [ create_test_experiment(3), create_test_experiment(4) ]
     exp_names = [ exp.name for exp in exps ]
-    export_experiments(experiments=exp_names,
-        output_dir=output_dir,
-        export_metadata_tags=export_metadata_tags,
-        notebook_formats=notebook_formats,
-        use_threads=use_threads)
+    export_experiments_wrapper(experiments=exp_names,
+                               output_dir=output_dir,
+                               export_metadata_tags=export_metadata_tags,
+                               notebook_formats=notebook_formats,
+                               use_threads=use_threads)
 
-    import_experiments(output_dir, experiment_name_suffix=exp_suffix, use_src_user_id=False, import_metadata_tags=False, use_threads=False)
+    import_experiments_wrapper(output_dir,
+                               experiment_name_suffix=exp_suffix,
+                               use_src_user_id=False,
+                               import_metadata_tags=False,
+                               use_threads=False)
 
     base_dir = os.path.join(output_dir,"test_compare_runs")
     os.makedirs(base_dir)

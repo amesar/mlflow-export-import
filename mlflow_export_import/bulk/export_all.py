@@ -12,6 +12,7 @@ from mlflow_export_import.bulk import write_export_manifest_file
 
 ALL_STAGES = "Production,Staging,Archive,None" 
 
+
 @click.command()
 @click.option("--output-dir", 
     help="Output directory.", 
@@ -30,8 +31,13 @@ ALL_STAGES = "Production,Staging,Archive,None"
     default=False,
     show_default=True
 )
+def export_all(output_dir, notebook_formats, use_threads):
+    """
+    Export the entire tracking server
 
-def main(output_dir, notebook_formats, use_threads):
+    All registered models, experiments, runs and Databricks notebook associated
+    with the run (best effort).
+    """
     print("Options:")
     for k,v in locals().items():
         print(f"  {k}: {v}")
@@ -48,7 +54,8 @@ def main(output_dir, notebook_formats, use_threads):
         use_threads=use_threads)
     duration = round(time.time() - start_time, 1)
     write_export_manifest_file(output_dir, duration, ALL_STAGES, notebook_formats)
-    print(f"Duraton for entire tracking server export: {duration} seconds")
+    print(f"Duration for entire tracking server export: {duration} seconds")
+
 
 if __name__ == "__main__":
-    main()
+    export_all()

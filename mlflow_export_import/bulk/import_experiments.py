@@ -9,6 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 from mlflow_export_import import click_doc
 from mlflow_export_import.experiment.import_experiment import ExperimentImporter
 
+
 def _import_experiment(importer, exp_name, exp_input_dir):
     try:
         importer.import_experiment(exp_name, exp_input_dir)
@@ -16,12 +17,14 @@ def _import_experiment(importer, exp_name, exp_input_dir):
         import traceback
         traceback.print_exc()
 
-def import_experiments(input_dir, experiment_name_suffix, use_src_user_id, import_metadata_tags, use_threads): 
-    path = os.path.join(input_dir,"manifest.json")
+
+def import_experiments_wrapper(input_dir, experiment_name_suffix, use_src_user_id,
+                               import_metadata_tags, use_threads):
+    path = os.path.join(input_dir, "manifest.json")
     with open(path, "r") as f:
         dct = json.loads(f.read())
     for exp in dct["experiments"]:
-        print("  ",exp)
+        print("  ", exp)
 
     importer = ExperimentImporter(None,
         use_src_user_id=use_src_user_id,
@@ -33,26 +36,27 @@ def import_experiments(input_dir, experiment_name_suffix, use_src_user_id, impor
             exp_name = exp["name"] + experiment_name_suffix if experiment_name_suffix else exp["name"]
             executor.submit(_import_experiment, importer, exp_name, exp_input_dir)
 
+
 @click.command()
-@click.option("--input-dir", 
+@click.option("--input-dir",
     help="Input directory.", required=True, type=str
 )
-@click.option("--experiment-name-suffix", 
-    help="If specified, added as suffix to experiment name.", 
-    default=None, 
-    type=str, 
+@click.option("--experiment-name-suffix",
+    help="If specified, added as suffix to experiment name.",
+    default=None,
+    type=str,
    show_default=True
 )
-@click.option("--use-src-user-id", 
-    help=click_doc.use_src_user_id, 
-    type=bool, 
-    default=False, 
+@click.option("--use-src-user-id",
+    help=click_doc.use_src_user_id,
+    type=bool,
+    default=False,
    show_default=True
 )
-@click.option("--import-metadata-tags", 
-    help=click_doc.import_metadata_tags, 
-    type=bool, 
-    default=False, 
+@click.option("--import-metadata-tags",
+    help=click_doc.import_metadata_tags,
+    type=bool,
+    default=False,
    show_default=True
 )
 @click.option("--use-threads",
@@ -62,11 +66,17 @@ def import_experiments(input_dir, experiment_name_suffix, use_src_user_id, impor
     show_default=True
 )
 
-def main(input_dir, experiment_name_suffix, use_src_user_id, import_metadata_tags, use_threads): 
+def import_experiments(input_dir, experiment_name_suffix, use_src_user_id, import_metadata_tags,
+                       use_threads):
+    """
+    Import a list of experiment from a directory.
+    """
     print("Options:")
-    for k,v in locals().items():
+    for k, v in locals().items():
         print(f"  {k}: {v}")
-    import_experiments(input_dir, experiment_name_suffix, use_src_user_id, import_metadata_tags, use_threads)
+    import_experiments_wrapper(input_dir, experiment_name_suffix, use_src_user_id,
+                               import_metadata_tags, use_threads)
+
 
 if __name__ == "__main__":
-    main()
+    import_experiments()

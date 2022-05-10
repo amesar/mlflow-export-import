@@ -91,35 +91,39 @@ class ModelExporter():
                 print(f"WARNING: stage '{stage}' must be one of: {model_version_stages.ALL_STAGES}")
         return stages
 
+
 @click.command()
-@click.option("--model", 
-    help="Registered model name.", 
+@click.option("--model",
+    help="Registered model name.",
     type=str,
     required=True
 )
-@click.option("--output-dir", 
-    help="Output directory.", 
+@click.option("--output-dir",
+    help="Output directory.",
     type=str,
     required=True
 )
-@click.option("--stages", 
-    help=click_doc.model_stages, 
+@click.option("--stages",
+    help=click_doc.model_stages,
     type=str,
     required=False
 )
-@click.option("--notebook-formats", 
-    help=click_doc.notebook_formats, 
+@click.option("--notebook-formats",
+    help=click_doc.notebook_formats,
     type=str,
-    default="", 
+    default="",
     show_default=True
 )
-
-def main(model, output_dir, stages, notebook_formats):
+def export_model(model, output_dir, stages, notebook_formats):
+    """
+    Export a registered model and all the experiment runs associated with each version.
+    """
     print("Options:")
     for k,v in locals().items():
         print(f"  {k}: {v}")
     exporter = ModelExporter(stages=stages, notebook_formats=utils.string_to_list(notebook_formats))
     exporter.export_model(model, output_dir)
 
+
 if __name__ == "__main__":
-    main()
+    export_model()

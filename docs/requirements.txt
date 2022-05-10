@@ -1,0 +1,10 @@
+sphinx
+sphinx-rtd-theme
+autodocsumm
+myst-parser
+autoclasstoc
+sphinx-copybutton
+sphinx_autodoc_defaultargs
+sphinxcontrib-apidoc
+sphinx-click
+sphinx-autodoc-typehints

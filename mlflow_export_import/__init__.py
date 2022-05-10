@@ -1,9 +1,11 @@
+from ._version import __version__  # noqa # isort: skip
 
 import os
-import json
+
 import mlflow
 
-class BaseCopier():
+
+class BaseCopier:
     def __init__(self, src_client, dst_client):
         self.src_client = src_client
         self.dst_client = dst_client
@@ -34,7 +36,7 @@ def  create_client(uri):
 # monkey patch mlflow.tracking.MlflowClient
 
 def add_repr_to_MlflowClient():
-    def custom_repr(self): 
+    def custom_repr(self):
         try:
             return self._tracking_client.tracking_uri
         except AttributeError:

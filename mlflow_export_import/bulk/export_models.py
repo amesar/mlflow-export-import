@@ -64,44 +64,47 @@ def _export_models(model_names, output_dir, notebook_formats, stages, export_run
     print(f"{len(model_names)} models exported")
     print(f"Duration for registered models export: {duration} seconds")
 
-def export_models(model_names, output_dir, notebook_formats, stages="", export_all_runs=False, use_threads=False):
+
+def export_models_wrapper(model_names, output_dir, notebook_formats, stages="",
+                          export_all_runs=False, use_threads=False):
     exps_and_runs = get_experiments_runs_of_models(model_names)
     exp_ids = exps_and_runs.keys()
     start_time = time.time()
     out_dir = os.path.join(output_dir,"experiments")
     exps_to_export = exp_ids if export_all_runs else exps_and_runs
-    export_experiments.export_experiments(exps_to_export, out_dir, True, notebook_formats, use_threads)
+    export_experiments.export_experiments_wrapper(exps_to_export, out_dir, True, notebook_formats, use_threads)
     _export_models(model_names, os.path.join(output_dir,"models"), notebook_formats, stages, export_run=False, use_threads=use_threads)
     duration = round(time.time() - start_time, 1)
     write_export_manifest_file(output_dir, duration, stages, notebook_formats)
     print(f"Duration for total registered models and versions' runs export: {duration} seconds")
 
+
 @click.command()
 @click.option("--output-dir",
-     help="Output directory.", 
+     help="Output directory.",
      type=str,
     required=True
 )
-@click.option("--models", 
-    help="Models to export. Values are 'all', comma seperated list of models or model prefix with * ('sklearn*'). Default is 'all'", 
+@click.option("--models",
+    help="Models to export. Values are 'all', comma seperated list of models or model prefix with * ('sklearn*'). Default is 'all'",
     type=str,
     default="all"
 )
-@click.option("--stages", 
-    help=click_doc.model_stages, 
+@click.option("--stages",
+    help=click_doc.model_stages,
     type=str,
     required=False
 )
-@click.option("--notebook-formats", 
-    help=click_doc.notebook_formats, 
+@click.option("--notebook-formats",
+    help=click_doc.notebook_formats,
     type=str,
-    default="", 
+    default="",
     show_default=True
 )
-@click.option("--export-all-runs", 
-    help="Export all runs of experiment or just runs associated with registered model versions.", 
-    type=bool, 
-    default=False, 
+@click.option("--export-all-runs",
+    help="Export all runs of experiment or just runs associated with registered model versions.",
+    type=bool,
+    default=False,
     show_default=False
 )
 @click.option("--use-threads",
@@ -110,17 +113,27 @@ def export_models(model_names, output_dir, notebook_formats, stages="", export_a
     default=False,
     show_default=True
 )
+def export_models(models,
+                  output_dir,
+                  stages,
+                  notebook_formats,
+                  export_all_runs,
+                  use_threads):
+    """
+    Exports models and their versions' backing
 
-def main(models, output_dir, stages, notebook_formats, export_all_runs, use_threads):
+    Run along with the experiment that the run belongs to.
+    """
     print("Options:")
     for k,v in locals().items():
         print(f"  {k}: {v}")
-    export_models(models, 
-        output_dir=output_dir, 
-        notebook_formats=notebook_formats, 
-        stages=stages, 
-        export_all_runs=export_all_runs, 
-        use_threads=use_threads)
+    export_models_wrapper(models,
+                          output_dir=output_dir,
+                          notebook_formats=notebook_formats,
+                          stages=stages,
+                          export_all_runs=export_all_runs,
+                          use_threads=use_threads)
+
 
 if __name__ == "__main__":
-    main()
+    export_models()

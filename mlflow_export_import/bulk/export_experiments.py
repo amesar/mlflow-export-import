@@ -38,7 +38,8 @@ def _export_experiment(exp_id_or_name, output_dir, exporter, export_results, run
         traceback.print_exc()
     return ok_runs, failed_runs
 
-def export_experiments(experiments, output_dir, export_metadata_tags, notebook_formats, use_threads=False):
+def export_experiments_wrapper(experiments, output_dir, export_metadata_tags,
+                               notebook_formats, use_threads=False):
     """
     :param: experiments: Can be either:
       - List of experiment names 
@@ -139,16 +140,19 @@ def export_experiments(experiments, output_dir, export_metadata_tags, notebook_f
     default=False,
     show_default=True
 )
-
-def main(experiments, output_dir, export_metadata_tags, notebook_formats, use_threads): 
+def export_experiments(experiments, output_dir, export_metadata_tags, notebook_formats, use_threads):
+    """
+    Exports experiments to a directory.
+    """
     print("Options:")
-    for k,v in locals().items():
+    for k, v in locals().items():
         print(f"  {k}: {v}")
-    export_experiments(experiments=experiments,
-        output_dir=output_dir,
-        export_metadata_tags=export_metadata_tags,
-        notebook_formats=notebook_formats,
-        use_threads=use_threads)
+    export_experiments_wrapper(experiments=experiments,
+                               output_dir=output_dir,
+                               export_metadata_tags=export_metadata_tags,
+                               notebook_formats=notebook_formats,
+                               use_threads=use_threads)
+
 
 if __name__ == "__main__":
-    main()
+    export_experiments()

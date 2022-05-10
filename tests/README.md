@@ -29,7 +29,7 @@ mlflow server --host localhost --port 5001 \
 ```
 export MLFLOW_TRACKING_URI=http://localhost:5001
 export PYTHONPATH=..
-pytest -s -v test*.py
+tox -e py pytest -s -v test*.py
 ```
 
 ```
