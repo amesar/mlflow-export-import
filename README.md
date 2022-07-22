@@ -1,5 +1,12 @@
 # MLflow Export Import
 
+***
+<h3>
+<b><span style="color:red">This repo is deprecated. Please use: <a href="https://github.com/mlflow/mlflow-export-import">https://github.com/mlflow/mlflow-export-import</a></span></b>
+</h3>
+
+***
+
 This package provides tools to export and import MLflow objects (runs, experiments or registered models) from one MLflow tracking server (Databricks workspace) to another.
 See the [Databricks MLflow Object Relationships](https://github.com/amesar/mlflow-resources/blob/master/slides/Databricks_MLflow_Object_Relationships.pdf) slide deck.
 
