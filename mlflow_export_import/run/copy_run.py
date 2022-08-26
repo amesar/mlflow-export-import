@@ -29,11 +29,12 @@ class RunCopier(BaseCopier):
 
     def _copy_run(self, src_run_id, dst_experiment_id):
         src_run = self.src_client.get_run(src_run_id)
-        dst_run = self.dst_client.create_run(dst_experiment_id) # NOTE: does not set user_id; is 'unknown'
+        dst_run = self.dst_client.create_run(experiment_id=dst_experiment_id, start_time=src_run.info.start_time) # NOTE: does not set user_id; is 'unknown'
         self._copy_run_data(src_run, dst_run.info.run_id)
         local_path = self.src_client.download_artifacts(src_run_id,"")
         self.dst_client.log_artifacts(dst_run.info.run_id,local_path)
         self.dst_client.set_terminated(dst_run.info.run_id, src_run.info.status)
+        self._update_run_info(src_run, dst_run)
         return (dst_run.info.run_id, src_run.data.tags.get("mlflow.parentRunId",None))
 
     def _copy_run_data(self, src_run, dst_run_id):
@@ -44,6 +45,9 @@ class RunCopier(BaseCopier):
         tags = [ RunTag(k,str(v)) for k,v in tags.items() ]
         utils.set_dst_user_id(tags, src_run.info.user_id, self.use_src_user_id)
         self.dst_client.log_batch(dst_run_id, metrics, params, tags)
+
+    def _update_run_info(self, src_run, dst_run):
+        self.dst_client._tracking_client.store.update_run_info(run_id=dst_run.info.run_id, run_status=src_run.info.status, end_time=src_run.info.end_time)
 
 @click.command()
 @click.option("--src-uri", 
